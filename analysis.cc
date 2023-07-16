@@ -210,11 +210,8 @@ void analysis::Loop(double cross_section, TString puflag, TString xiflag, TStrin
         sxi = "Horizental" ;
     }
 
-    //TString sxi = "Horizental" ; // "Vertical_Xi"; //"Horizental"
-    //TString spu = "PU==0&1";
-    //TString ssig = signame; //"madgraph" ;// "signal2"; // "zzbkg3";
-    //TString path = "/afs/cern.ch/user/s/sibashir/zzbkg/plots/";
-    TString path = "/eos/cms/store/group/phys_top/bashiri/plots/";
+    TString path = "/home/sima/zz/";
+
            
     std::vector<TString> regions{"channelCut", "photonSizeCut", "ProtonsCut_Pz", "protonSizeCut", "Mzwindow", "CMSXiCut", "ZVertexCut", "timingCut", "XiResulutionCut", "RapidityCut"};
     std::vector<TString> channels{"ee", "mumu"};
