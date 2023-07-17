@@ -286,8 +286,9 @@ void analysis::Loop(double cross_section, TString puflag, TString xiflag, TStrin
         region = 0;
 
         weight = lumi * cross_section / nentries;
-      //zy SM
-      //weight = lumi * cross_section * Event_Weight[0] * 0.06729 * 1e-12 / nentries;
+        if (ssig=="zy")
+            //zy SM
+            weight = lumi * cross_section * Event_Weight[0] * 0.06729 * 1e-12 / nentries;
 
       std::vector<lepton_candidate*> *selectedLeptons;
       std::vector<photon_candidate*> *selectedPhotons;
@@ -506,7 +507,7 @@ void analysis::Loop(double cross_section, TString puflag, TString xiflag, TStrin
       if(ch==0)   ele_xicondition++;
       if(ch==1)   mu_xicondition++;
 
-      cout << "xi " << xi_cms1 << "  " << xi_smear[0]  << "  " << xi_smear[(*selectedProtons)[0]->indice_]<< "  " << (*selectedProtons)[0]->xi_ <<   endl;
+      cout << "xi " << xi_cms1 << "  " << xi_cms2  << "  " << xi_smear[(*selectedProtons)[0]->indice_]<< "  " << (*selectedProtons)[1]->xi_ <<   endl;
 
       xi_cms1 = xi_cms1*(1+smear);
       xi_cms2 = xi_cms2*(1+smear);
@@ -682,10 +683,10 @@ void analysis::Loop(double cross_section, TString puflag, TString xiflag, TStrin
     //open file for writing
     ofstream fw(path +  ssig + "_" + sxi + "_" + spu + "_" + timepc + "_" + "ee" + ".txt", std::ofstream::out);
     if (fw.is_open()){
-    //     fw << "AllEvents" << "\t" << nentries*weight << "\n";
+        fw << "AllEvents" << "\t" << nentries*weight << "\n";
     //     fw << "lepCutPtEta30" << "\t" << leptonCut_pt20*weight << "\n";
-        fw << "ZPt_cut: " << "\t" << ZPt_cut*weight << "\n";
         fw << "leptonSizeCut" << "\t" << leptonSizeCut*weight << "\n";
+        fw << "ZPtCut " << "\t" << ZPt_cut*weight << "\n";
         fw << "channelCut" << "\t" << ele_channelCut*weight << "\n";
         fw << "photonSizeCut" << "\t" << ele_photonSizeCut*weight << "\n";
         fw << "PPSXiCut" << "\t" << ele_ProtonsCut_Pz*weight << "\n";
@@ -705,12 +706,12 @@ void analysis::Loop(double cross_section, TString puflag, TString xiflag, TStrin
     if (fwm.is_open()){
         fwm << "AllEvents" << "\t" << nentries*weight << "\n";
     //     fwm << "lepCutPtEta20" << "\t" << leptonCut_pt20*weight << "\n";
-        fwm << "ZPt_cut: " << "\t" << ZPt_cut*weight << "\n";
         fwm << "leptonSizeCut" << "\t" << leptonSizeCut*weight << "\n";
+        fwm << "ZPtCut " << "\t" << ZPt_cut*weight << "\n";
         fwm << "channelCut" << "\t" << mu_channelCut*weight << "\n";
         fwm << "photonSizeCut" << "\t" << mu_photonSizeCut*weight << "\n";
         fwm << "PPSXiCut" << "\t" << mu_ProtonsCut_Pz*weight << "\n";
-        fwm << "protonSizeCut" << "\t" << ele_protonSizeCut*weight << "\n";
+        fwm << "protonSizeCut" << "\t" << mu_protonSizeCut*weight << "\n";
         fwm << "MzCut" << "\t" << mu_Mzwindow*weight << "\n";
 //         fwm << "XiCut" << "\t" << mu_xiCut*weight << "\n";
         fwm << "r1CMSXiCut" << "\t" << mu_r1cms_xiCut*weight << "\n";
