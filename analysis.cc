@@ -174,8 +174,10 @@ void analysis::Loop(double cross_section, TString puflag, TString xiflag, TStrin
     int ele_MassCut = 0;
     int mu_MassCut = 0;
     int XiResulutionCut = 0;
-    int ele_XiResulutionCut = 0;
-    int mu_XiResulutionCut = 0;
+    int ele_r1XiResulutionCut = 0;
+    int mu_r2XiResulutionCut = 0;
+    int ele_r2XiResulutionCut = 0;
+    int mu_r1XiResulutionCut = 0;
     int RapidityCut = 0;
     int ele_RapidityCut = 0;
     int mu_RapidityCut = 0;
@@ -207,13 +209,12 @@ void analysis::Loop(double cross_section, TString puflag, TString xiflag, TStrin
       //Horizental
         xi_min = 0.0472; // using the 234m station
         xi_max = 0.287; // using the 196m station
-        sxi = "Horizental" ;
+        sxi = "Horizontal" ;
     }
 
-    TString path = "/home/sima/zz/";
-
+    TString path = "/eos/cms/store/group/phys_top/bashiri/plots/";
            
-    std::vector<TString> regions{"channelCut", "photonSizeCut", "ProtonsCut_Pz", "protonSizeCut", "Mzwindow", "CMSXiCut", "ZVertexCut", "timingCut", "XiResulutionCut", "RapidityCut"};
+    std::vector<TString> regions{"channelCut", "photonSizeCut", "ProtonsCut_Pz", "protonSizeCut", "Mzwindow", "CMSXiCut", "XiResulutionCut", "ZVertexCut", "timingCut", "RapidityCut"};
     std::vector<TString> channels{"ee", "mumu"};
     std::vector<TString> vars   {"lep1Pt","lep1Eta","lep1Phi","lep2Pt","lep2Eta","lep2Phi","photonPt","photonEta","photonPhi","Mz","Ptz","Drz","Dphiz","proton1Pt","proton1Rapidity","proton1Phi","proton2Pt","proton2Rapidity","proton2Phi", "zgammaM", "zgammaPt", "zgammaRapidity", "YXyzgamma", "YX", "xi_Resolution(p1&p2)", "diff1", "diff2", "time_Resolution", "ZVertex_resolution",  "isPU", "isnotPU", "ZYdPhi"};
 
@@ -466,10 +467,10 @@ void analysis::Loop(double cross_section, TString puflag, TString xiflag, TStrin
       float diff1 = xi_smear[(*selectedProtons)[0]->indice_]-((sum_p + sum_pz)/14000);
       float diff2 = xi_smear[(*selectedProtons)[1]->indice_]-((sum_p - sum_pz)/14000);
 
-      float C = 30;
+      float C = 30;  //cm/nsec
       float tp1, tp2;
-      float tr = (pow(10,9))* timepc * 1E-12;
-      float tr2 = (pow(10,9))* timepc * 1E-12;
+      float tr = (pow(10,9))* timepc * 1E-12; //nsec
+      float tr2 = (pow(10,9))* timepc * 1E-12;  //nsec
 
       //TRandom3 *r1 = new TRandom3();
       //r1->SetSeed(19680801);
@@ -524,6 +525,18 @@ void analysis::Loop(double cross_section, TString puflag, TString xiflag, TStrin
       region++;
 
 
+      if(abs(1-(*selectedProtons)[0]->xi_/xi_cms1) > 0.15 and abs(1-(*selectedProtons)[0]->xi_/xi_cms2) > 0.15)   continue;
+      if(ch==0)   ele_r1XiResulutionCut++;
+      if(ch==1)   mu_r1XiResulutionCut++;
+      if(abs(1-(*selectedProtons)[1]->xi_/xi_cms2) > 0.15 and abs(1-(*selectedProtons)[1]->xi_/xi_cms1) > 0.15)   continue;
+      XiResulutionCut++;
+      if(ch==0)   ele_r2XiResulutionCut++;
+      if(ch==1)   mu_r2XiResulutionCut++;
+
+      histogram(Hists, Hists2, ch, region, selectedLeptons, selectedPhotons, selectedProtons, weight, GenProton_Rapidity, YZ_Rapidity, YX, diff1, diff2, Vertex_T, Vertex_Z, xi_cms1, xi_cms2, z_V, GenProton_IsPU, tVertex, MX);
+      region++;
+
+
       if(1 - abs(Vertex_Z[0])*100/abs(z_V) > 0.002 )  continue;
       ZVertexCut++;
       if(ch==0)   ele_ZVertexCut++;
@@ -532,22 +545,14 @@ void analysis::Loop(double cross_section, TString puflag, TString xiflag, TStrin
       histogram(Hists, Hists2, ch, region, selectedLeptons, selectedPhotons, selectedProtons, weight, GenProton_Rapidity, YZ_Rapidity, YX, diff1, diff2, Vertex_T, Vertex_Z, xi_cms1, xi_cms2, z_V, GenProton_IsPU, tVertex, MX);
       region++;
 
-      if(( 1 - Vertex_T[0]*1e9/tVertex) < 0.8 ){  //continue;
+
+
+      if(( 1 - Vertex_T[0]*1e9/tVertex) > 0.8 )    continue;
           timingCut++;
           if(ch==0)   ele_timingCut++;
           if(ch==1)   mu_timingCut++;
           histogram(Hists, Hists2, ch, region, selectedLeptons, selectedPhotons, selectedProtons, weight, GenProton_Rapidity, YZ_Rapidity, YX, diff1, diff2, Vertex_T, Vertex_Z, xi_cms1, xi_cms2, z_V, GenProton_IsPU, tVertex, MX);
           region++;
-      }
-
-      if(abs(1-(*selectedProtons)[0]->xi_/xi_cms1) > 0.15 )   continue;
-      if(abs(1-(*selectedProtons)[1]->xi_/xi_cms2) > 0.15 )   continue;
-      XiResulutionCut++;
-      if(ch==0)   ele_XiResulutionCut++;
-      if(ch==1)   mu_XiResulutionCut++;
-
-      histogram(Hists, Hists2, ch, region, selectedLeptons, selectedPhotons, selectedProtons, weight, GenProton_Rapidity, YZ_Rapidity, YX, diff1, diff2, Vertex_T, Vertex_Z, xi_cms1, xi_cms2, z_V, GenProton_IsPU, tVertex, MX);
-      region++;
 
 
       if( abs(YX - YZ_Rapidity) > 0.05e-6 )    continue;
@@ -571,6 +576,18 @@ void analysis::Loop(double cross_section, TString puflag, TString xiflag, TStrin
       for (int l=0;l<selectedProtons->size();l++){
         delete (*selectedProtons)[l];
       }
+//       for (int l=0;l<selectedProtonsplus->size();l++){
+//         delete (*selectedProtonsplus)[l];
+//       }
+//       for (int l=0;l<selectedProtonsplusSmear->size();l++){
+//         delete (*selectedProtonsplusSmear)[l];
+//       }
+//       for (int l=0;l<selectedProtonsminus->size();l++){
+//         delete (*selectedProtonsminus)[l];
+//       }
+//       for (int l=0;l<selectedProtonsminusSmear->size();l++){
+//         delete (*selectedProtonsminusSmear)[l];
+//       }
       selectedLeptons->clear();
       selectedLeptons->shrink_to_fit();
       delete selectedLeptons;
@@ -580,8 +597,19 @@ void analysis::Loop(double cross_section, TString puflag, TString xiflag, TStrin
       selectedProtons->clear();
       selectedProtons->shrink_to_fit();
       delete selectedProtons;
+//       selectedProtonsplus->clear();
+//       selectedProtonsplus->shrink_to_fit();
+//       delete selectedProtonsplus;
+//       selectedProtonsplusSmear->clear();
+//       selectedProtonsplusSmear->shrink_to_fit();
+//       delete selectedProtonsplusSmear;
+//       selectedProtonsminus->clear();
+//       selectedProtonsminus->shrink_to_fit();
+//       delete selectedProtonsminus;
+//       selectedProtonsminusSmear->clear();
+//       selectedProtonsminusSmear->shrink_to_fit();
+//       delete selectedProtonsminusSmear;
       nAccept++;
-
     }
 
     cout<<"from "<<nentries<<" evnets, "<<nAccept*weight<<" events are accepted"<<endl;
@@ -589,11 +617,13 @@ void analysis::Loop(double cross_section, TString puflag, TString xiflag, TStrin
     gROOT->SetBatch(kTRUE);
     int counter = 0;
     for (int i=0;i<channels.size();++i){
-        if(i<1)	continue;
+        if(ssig != "zy" and i<1)	continue;
         for (int k=0;k<regions.size();++k){
           //if(k<4)	continue;
             for (int l=0;l<vars.size();++l){
               counter++;
+              gSystem->MakeDirectory(path + "/" + ssig);
+              gSystem->MakeDirectory(path + "/" + ssig + "/" + sxi);
               gSystem->MakeDirectory(path + "/" + ssig + "/" + sxi + "/" + regions[k]);
               Hists[i][k][l]->Write("",TObject::kOverwrite);//
               TCanvas *c = new TCanvas("c2", "", 800, 600);
@@ -629,11 +659,13 @@ void analysis::Loop(double cross_section, TString puflag, TString xiflag, TStrin
     }
 //   counter = 0;
     for (int i=0;i<channels.size();++i){
-        if(i<1)	continue;
+        if(ssig != "zy" and i<1)	continue;
         for (int k=0;k<regions.size();++k){
           //if(k<4)	continue;
             for (int l=0;l<vars2.size();++l){
                 counter++;
+                gSystem->MakeDirectory(path + "/" + ssig);
+                gSystem->MakeDirectory(path + "/" + ssig + "/" + sxi);
                 gSystem->MakeDirectory(path + "/" + ssig + "/" + sxi + "/" + regions[k]);
                 Hists2[i][k][l]  ->Write("",TObject::kOverwrite);//
                 TCanvas *c = new TCanvas("c2", "", 800, 600);
@@ -658,14 +690,14 @@ void analysis::Loop(double cross_section, TString puflag, TString xiflag, TStrin
             }
         }
     }
-  
+
 //   h_llyInvMass->Write("",TObject::kOverwrite);//
 //   h_llyrapidty->Write("",TObject::kOverwrite);//
 //   h_ppInvMass->Write("",TObject::kOverwrite);//
 //   TCanvas *c = new TCanvas();
 //   h_llyInvMass->Draw("col z");
 //   c
-  
+
 
     file_out.Close();
     cout << "Finish" << endl;
@@ -694,13 +726,13 @@ void analysis::Loop(double cross_section, TString puflag, TString xiflag, TStrin
         fw << "MzCut" << "\t" << ele_Mzwindow*weight << "\n";
         fw << "r1CMSXiCut" << "\t" << ele_r1cms_xiCut*weight << "\n";
         fw << "r2CMSXiCut" << "\t" << ele_r2cms_xiCut*weight << "\n";
+        fw << "r1XiResolutionCut" << "\t" << ele_r1XiResulutionCut*weight << "\n";
+	fw << "r2XiResolutionCut" << "\t" << ele_r2XiResulutionCut*weight << "\n";
         fw << "ZVertexCut" << "\t" << ele_ZVertexCut*weight << "\n";
-        //fw << "timingCut" << "\t" << timingCut*weight << "\n";
-        fw << "XiResolutionCut" << "\t" << ele_XiResulutionCut*weight << "\n";
-
+        fw << "timingCut" << "\t" << ele_timingCut*weight << "\n";
         fw.close();
     }
-    
+
     //open file for writing
     ofstream fwm(path +  ssig + "_" + sxi + "_" + spu + "_" + timepc + "_" + "mumu" + ".txt", std::ofstream::out);
     if (fwm.is_open()){
@@ -716,9 +748,10 @@ void analysis::Loop(double cross_section, TString puflag, TString xiflag, TStrin
 //         fwm << "XiCut" << "\t" << mu_xiCut*weight << "\n";
         fwm << "r1CMSXiCut" << "\t" << mu_r1cms_xiCut*weight << "\n";
         fwm << "r2CMSXiCut" << "\t" << mu_r2cms_xiCut*weight << "\n";
-        fwm << "ZVertexCut" << "\t" << mu_ZVertexCut*weight << "\n";
-        //fw << "timingCut" << "\t" << timingCut*weight << "\n";
-        fwm << "XiResolutionCut" << "\t" << mu_XiResulutionCut*weight << "\n";
+        fwm << "r1XiResolutionCut" << "\t" << mu_r1XiResulutionCut*weight << "\n";
+        fwm << "r2XiResolutionCut" << "\t" << mu_r2XiResulutionCut*weight << "\n";
+        fwm << "ZVertexCut" << "\t" << mu_ZVertexCut*weight << "\n";        
+        fwm << "timingCut" << "\t" << mu_timingCut*weight << "\n";
 
         fwm.close();
 
@@ -727,5 +760,6 @@ void analysis::Loop(double cross_section, TString puflag, TString xiflag, TStrin
 
 
 }
+
 
 
