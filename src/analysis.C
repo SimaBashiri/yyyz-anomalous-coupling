@@ -9,9 +9,6 @@
 #include "lepton_candidate.h"
 #include "photon_candidate.h"
 #include "proton_candidate.h"
-#include "lepton_candidate.cc"
-#include "photon_candidate.cc"
-#include "proton_candidate.cc"
 #include <TRandom3.h>
 #include <TLatex.h>
 #include <iostream>
