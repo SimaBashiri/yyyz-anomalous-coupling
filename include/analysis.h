@@ -23,6 +23,13 @@
 #include <iostream>
 #include <TRandom3.h>
 
+#include "lepton_candidate.h"
+#include "photon_candidate.h"
+#include "proton_candidate.h"
+#include "lepton_candidate.cc"
+#include "photon_candidate.cc"
+#include "proton_candidate.cc"
+
 class analysis {
 public :
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
@@ -30,7 +37,13 @@ public :
 
         TRandom3 *r = new TRandom3();
         TRandom3 *r1 = new TRandom3();
-
+        
+      std::vector<lepton_candidate*> *selectedLeptons;
+      std::vector<photon_candidate*> *selectedPhotons;
+      std::vector<proton_candidate*> *selectedProtons;
+      std::vector<proton_candidate*> *selectedProtonsPlus;
+      std::vector<proton_candidate*> *selectedProtonsMinus;
+      
 // Fixed size dimensions of array or collections stored in the TTree if any.
    static constexpr Int_t kMaxEvent = 1;
    static constexpr Int_t kMaxWeight = 1;

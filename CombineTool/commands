@@ -1,0 +1,4 @@
+combine -M FitDiagnostics datacard_Horizontal_ZVertexCut.txt -t -1 --expectSignal 0 --rMin -1 --rMax 2 --forceRecreateNLL
+combine -M FitDiagnostics datacard_Vertical_ZVertexCut.txt -t -1 --expectSignal 1 --rMin -1 --rMax 2 --forceRecreateNLL
+combine -M AsymptoticLimits datacard_Horizontal_ZVertexCut.txt --run blind -t -1
+combine -M AsymptoticLimits datacard_Vertical_ZVertexCut.txt --run blind -t -1

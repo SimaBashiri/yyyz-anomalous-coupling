@@ -85,5 +85,15 @@ int main(){
     analysis t(ch);
     t.Loop(3.55E-16, "all", "V", "signal1", tp);
 
+    TChain* ch = new TChain("Delphes") ;
+    ch->Add(path + "ZJets_inc_SM_Madgraph5_JetPT200GeV_Delphes_PU200/*.root");
+    analysis t(ch);
+    t.Loop(60.517398e-12, "all", "V", "zjet", tp);
+
+    TChain* ch = new TChain("Delphes") ;
+    ch->Add(path + "ZJets_inc_SM_Madgraph5_JetPT200GeV_Delphes_PU200/*.root");
+    analysis t(ch);
+    t.Loop(60.517398e-12, "all", "H", "zjet", tp);
+
     return 0;
 }
