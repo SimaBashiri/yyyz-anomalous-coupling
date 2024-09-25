@@ -12,7 +12,7 @@ int main() {
     ch->Add(path + "ZToMuMu_M-120to200_TuneCP5_14TeV-powheg-pythia8/*");
     t.Loop(18.72e-12, "all", "V", "ztomumu1", tp);
 
-    ch->SetEntries(0);  // Clear the TChain
+    ch->SetEntries(0);  
     ch->Add(path + "ZToMuMu_M-120to200_TuneCP5_14TeV-powheg-pythia8/*");
     t.Loop(18.72e-12, "all", "H", "ztomumu1", tp);
 
@@ -78,6 +78,6 @@ int main() {
     ch->Add(path + "ZJets_inc_SM_Madgraph5_JetPT200GeV_Delphes_PU200/*.root");
     t.Loop(60.517398e-12, "all", "H", "zjet", tp);
 
-    delete ch; // Clean up the TChain after use
+    delete ch;
     return 0;
 }
