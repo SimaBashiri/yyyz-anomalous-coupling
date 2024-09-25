@@ -260,7 +260,6 @@ void analysis::Loop(double cross_section, TString puflag, TString xiflag, TStrin
     float xi_cms1;
     float xi_cms2;
 
-cout << ">>>> !!!!!!!!!!!! " << endl;
     float C = 30;  //cm/nsec
     float tp1, tp2;
     float tr = (pow(10,9))* timepc * 1E-12; //nsec
@@ -360,7 +359,7 @@ cout << ">>>> !!!!!!!!!!!! " << endl;
       nb = fChain->GetEntry(jentry);   nbytes += nb;
       displayProgress(jentry, nentries) ;
       // if (Cut(ientry) < 0) continue;
-       cout << "entry: "<< jentry <<  endl;
+      //  cout << "entry: "<< jentry <<  endl;
       //cout << "Tree Num: " << fChain->GetTreeNumber() << endl;
 
       ch = -1;
@@ -452,72 +451,6 @@ cout << ">>>> !!!!!!!!!!!! " << endl;
 
           smear = r->Gaus(0,0.02);
           float PE = TMath::Sqrt(GenProton_Px[l]*GenProton_Px[l] + GenProton_Py[l]*GenProton_Py[l] + GenProton_Pz[l]*GenProton_Pz[l] + GenProton_Mass[l]*GenProton_Mass[l]);
-
-        
-          // if( (1-abs(GenProton_Pz[l])/7000)*(1+smear) < xi_max && (1-abs(GenProton_Pz[l])/7000)*(1+smear) > xi_min && abs(GenProton_Pz[l]) < Pzp && GenProton_Pz[l] > 0 ){
-          //     Pzp = abs(GenProton_Pz[l]);
-          //     indP = l;
-          //     xiP = (1-abs(GenProton_Pz[l])/7000)*(1+smear);
-          // }
-          // if( (1-abs(GenProton_Pz[l])/7000)*(1+smear) < xi_max && (1-abs(GenProton_Pz[l])/7000)*(1+smear) > xi_min && abs(GenProton_Pz[l]) < Pzm && GenProton_Pz[l] < 0 ){
-          //     Pzm = abs(GenProton_Pz[l]);
-          //     indM = l;
-          //     xiM = (1-abs(GenProton_Pz[l])/7000)*(1+smear);
-          // }
-          
-          // if(selectedLeptons->size() > 1 && selectedPhotons->size() > 0){
-          //     xi_cms1 = ( ((*selectedLeptons)[0]->p4_).E() + ((*selectedLeptons)[1]->p4_).E() + ((*selectedPhotons)[0]->p4_).E() + ((*selectedLeptons)[0]->p4_).Pz() + ((*selectedLeptons)[1]->p4_).Pz() + ((*selectedPhotons)[0]->p4_).Pz() )/14000;
-          //     xi_cms2 = ( ((*selectedLeptons)[0]->p4_).E() + ((*selectedLeptons)[1]->p4_).E() + ((*selectedPhotons)[0]->p4_).E() - (((*selectedLeptons)[0]->p4_).Pz() + ((*selectedLeptons)[1]->p4_).Pz() + ((*selectedPhotons)[0]->p4_).Pz()) )/14000;
-          //     // xi_cms1 = xi_cms1*(1+smear);
-          //     // xi_cms2 = xi_cms2*(1+smear);
-          
-          //     if( (1-abs(GenProton_Pz[l])/7000)*(1+smear) < xi_max && (1-abs(GenProton_Pz[l])/7000)*(1+smear) > xi_min && (abs((1-abs(GenProton_Pz[l])/7000)*(1+smear) - xi_cms1) < xi_diff1 || abs((1-abs(GenProton_Pz[l])/7000)*(1+smear) - xi_cms2) < xi_diff1 )&& GenProton_Pz[l] > 0 ){
-          //         xi_diff1 = abs((1-abs(GenProton_Pz[l])/7000)*(1+smear) - xi_cms1) ;
-          //         indP = l;
-          //         xiP = (1-abs(GenProton_Pz[l])/7000)*(1+smear);
-          //     }
-          //     if( (1-abs(GenProton_Pz[l])/7000)*(1+smear) < xi_max && (1-abs(GenProton_Pz[l])/7000)*(1+smear) > xi_min && (abs((1-abs(GenProton_Pz[l])/7000)*(1+smear) - xi_cms2) < xi_diff2 || abs((1-abs(GenProton_Pz[l])/7000)*(1+smear) - xi_cms1) < xi_diff2) && GenProton_Pz[l] < 0 ){
-          //         xi_diff2 =  abs((1-abs(GenProton_Pz[l])/7000)*(1+smear) - xi_cms1) ;
-          //         indM = l;
-          //         xiM = (1-abs(GenProton_Pz[l])/7000)*(1+smear);
-          //     }
-          // }
-
-  //         if(selectedLeptons->size() > 1 && selectedPhotons->size() > 0){
-  //             xi_cms1 = ( ((*selectedLeptons)[0]->p4_).E() + ((*selectedLeptons)[1]->p4_).E() + ((*selectedPhotons)[0]->p4_).E() + ((*selectedLeptons)[0]->p4_).Pz() + ((*selectedLeptons)[1]->p4_).Pz() + ((*selectedPhotons)[0]->p4_).Pz() )/14000;
-  //             xi_cms2 = ( ((*selectedLeptons)[0]->p4_).E() + ((*selectedLeptons)[1]->p4_).E() + ((*selectedPhotons)[0]->p4_).E() - (((*selectedLeptons)[0]->p4_).Pz() + ((*selectedLeptons)[1]->p4_).Pz() + ((*selectedPhotons)[0]->p4_).Pz()) )/14000;
-  //             // xi_cms1 = xi_cms1*(1+smear);
-  //             // xi_cms2 = xi_cms2*(1+smear);
-          
-  //             if( (1-abs(GenProton_Pz[l])/7000)*(1+smear) < xi_max && (1-abs(GenProton_Pz[l])/7000)*(1+smear) > xi_min && (abs((1-abs(GenProton_Pz[l])/7000)*(1+smear) - xi_cms1) < xi_diff1 ) && GenProton_Pz[l] > 0 ){
-  //                 xi_diff1 = abs((1-abs(GenProton_Pz[l])/7000)*(1+smear) - xi_cms1) ;
-  //                 indP = l;
-  //                 xiP = (1-abs(GenProton_Pz[l])/7000)*(1+smear);
-  //             }
-  //             if( (1-abs(GenProton_Pz[l])/7000)*(1+smear) < xi_max && (1-abs(GenProton_Pz[l])/7000)*(1+smear) > xi_min && (abs((1-abs(GenProton_Pz[l])/7000)*(1+smear) - xi_cms2) < xi_diff2 ) && GenProton_Pz[l] < 0 ){
-  //                 xi_diff2 =  abs((1-abs(GenProton_Pz[l])/7000)*(1+smear) - xi_cms1) ;
-  //                 indM = l;
-  //                 xiM = (1-abs(GenProton_Pz[l])/7000)*(1+smear);
-  //             }
-  //         }
-
-  //         if(  abs(GenProton_Pz[l]) < Pzp_ && GenProton_Pz[l] > 0 ){
-  //             Pzp_ = abs(GenProton_Pz[l]);
-  //             indP_ = l;
-  //             xiP_ = (1-abs(GenProton_Pz[l])/7000)*(1+smear);
-  //         }
-  //         if( abs(GenProton_Pz[l]) < Pzm_ && GenProton_Pz[l] < 0 ){
-  //             Pzm_ = abs(GenProton_Pz[l]);
-  //             indM_ = l;
-  //             xiM_ = (1-abs(GenProton_Pz[l])/7000)*(1+smear);
-  //         }
-
-  //         xi.push_back(1-abs(GenProton_Pz[l])/7000);
-  // //           cout << "XI: " << xi[l] << endl;
-  //         smear = r->Gaus(0,0.02);
-  //         xi_smear.push_back( xi[l]*(1+smear) );
-
-  //     }
           float xiPPS = (1-abs(GenProton_Pz[l])/7000)*(1);
           if(xiPPS < xi_min || xiPPS > xi_max)  continue;
           if( GenProton_Pz[l] > 0 ){
@@ -534,7 +467,6 @@ cout << ">>>> !!!!!!!!!!!! " << endl;
       }
 
       int combsize = selectedProtonsPlus->size() * selectedProtonsMinus->size();
-      cout << "combsize: " << combsize << endl;
       for(int l=0; l < combsize; ++l){
 
       }
@@ -563,7 +495,6 @@ cout << ">>>> !!!!!!!!!!!! " << endl;
             selp = lp;
             selm = lm;
             if(GenProton_IsPU[indP_]==0 && GenProton_IsPU[indM_]==0)   pu=0;
-            cout << "minZVertex: " << minZVertex << "   pu: " << pu << endl;
           }
         }
       }
@@ -735,26 +666,6 @@ cout << ">>>> !!!!!!!!!!!! " << endl;
       if(ch==0)    ele_Mzwindow++;
       if(ch==1)    mu_Mzwindow++;
 
-      //  //PPS cut
-      // for (unsigned int l=0;l<selectedProtons->size();l++){
-      //     delete (*selectedProtons)[l];
-      // }
-      // selectedProtons->clear();
-      // selectedProtons->shrink_to_fit();
-
-
-      // selectedProtons = new std::vector<proton_candidate*>();
-      // if(indP > -1)  selectedProtons->push_back(new proton_candidate(GenProton_PT[indP],GenProton_Eta[indP],GenProton_Phi[indP], GenProton_E[indP] ,GenProton_Charge[indP],indP, xiP ));
-      // if(indM > -1)  selectedProtons->push_back(new proton_candidate(GenProton_PT[indM],GenProton_Eta[indM],GenProton_Phi[indM], GenProton_E[indM] ,GenProton_Charge[indM],indM, xiM ));
-      // // sort(selectedProtons->begin(), selectedProtons->end(), ComparePzProton);   
-
-      // if(indP > -1 && indM > -1){
-      //   ProtonsCut_Pz++;
-      //   histogram(Hists, Hists2, ch, region, selectedLeptons, selectedPhotons, selectedProtons, weight, GenProton_Rapidity, GenProton_T, GenProton_Z, Vertex_T, Vertex_Z, GenProton_IsPU, timepc, smear_p1, smear_p2);
-      //   region++;
-      //   if(ch==0)    ele_ProtonsCut_Pz++;
-      //   if(ch==1)    mu_ProtonsCut_Pz++;
-      // }
 
 
       // Protons size cut
@@ -820,16 +731,6 @@ cout << ">>>> !!!!!!!!!!!! " << endl;
 
       xi_cms1 = xi_cms1*(1+smear);
       xi_cms2 = xi_cms2*(1+smear);
-
-//       if(xi_cms1 < xi_min || xi_cms1 > xi_max) continue;
-//       if(ch==0)   ele_r1cms_xiCut++;
-//       if(ch==1)   mu_r1cms_xiCut++;
-//       if(xi_cms2 < xi_min || xi_cms2 > xi_max) continue;
-// //       cms_xiCut++;
-    //   if(ch==0)   ele_r2cms_xiCut++;
-    //   if(ch==1)   mu_r2cms_xiCut++;
-    //   histogram(Hists, Hists2, ch, region, selectedLeptons, selectedPhotons, selectedProtons, weight, GenProton_Rapidity, Vertex_T, Vertex_Z, GenProton_IsPU, timepc);
-    //   region++;
 
 
 //       if(abs(1-(*selectedProtons)[0]->xi_/xi_cms1) > 0.15 and abs(1-(*selectedProtons)[0]->xi_/xi_cms2) > 0.15)   continue; TMath::Sqrt(2)*2
@@ -910,7 +811,6 @@ cout << ">>>> !!!!!!!!!!!! " << endl;
           SampleCount++;
       }
 
-      cout << "zV: " << abs(abs(Vertex_Z[0]*100) - abs(-z_V)) << endl;
       if( abs(abs(Vertex_Z[0]*100) - abs(-z_V)) > 0.433 )  { //||  abs(Vertex_Z[0]*100 - (-z_V)) < 0.428
         for (int l=0;l<selectedLeptons->size();l++){
           delete (*selectedLeptons)[l];
@@ -982,18 +882,7 @@ cout << ">>>> !!!!!!!!!!!! " << endl;
       histogram(Hists, Hists2, ch, region, selectedLeptons, selectedPhotons, selectedProtons, weight, GenProton_Rapidity, GenProton_T, GenProton_Z, Vertex_T, Vertex_Z, GenProton_IsPU, timepc, smear_p1, smear_p2);
       region++;
 
-    //   if( abs(YX - YZ_Rapidity) > 0.05e-6 )    continue;
-    //   RapidityCut++;
-    //   histogram(Hists, Hists2, ch, region, selectedLeptons, selectedPhotons, selectedProtons, weight, GenProton_Rapidity, GenProton_T, GenProton_Z, Vertex_T, Vertex_Z, GenProton_IsPU, timepc);
-    //   region++;
-    //   if(ch==0)   ele_RapidityCut++;
-    //   if(ch==1)   mu_RapidityCut++;
 
-      // cout << "xi_cms: " <<  xi_cms1 << "  " << xi_cms2 << "  xi_smear: " << xi_smear[(*selectedProtons)[0]->indice_] << "  " << xi_smear[(*selectedProtons)[1]->indice_] << endl;
-
-      // for (int l=0;l<selectedProtonsplus->size();l++){
-      //   delete (*selectedProtonsplus)[l];
-      // }
 
       for (int l=0;l<selectedLeptons->size();l++){
         delete (*selectedLeptons)[l];
@@ -1105,17 +994,6 @@ cout << ">>>> !!!!!!!!!!!! " << endl;
 
 
     file_out.Close();
-    cout << "Finish" << endl;
-    cout << "pass_e  " << pass_e*weight << endl;
-    cout << "pass_mu  " << pass_mu*weight << endl;
-    cout << "pass_photon  " << pass_photon*weight << endl;
-    cout << "pass_proton  " << pass_proton*weight << endl;
-    cout << "integral: " << Hists[0][0][0]->Integral() << endl;
-    cout << "integral: " << Hists[1][0][0]->Integral() << endl;
-    cout << "weight: " << weight << endl;
-    cout << "Accept: " << nAccept << endl;
-
-    cout << "leptonCut_pt20: " << leptonCut_pt20*weight << "  leptonCut_Eta: " << leptonCut_Eta*weight << "ZPt_cut: " << ZPt_cut*weight << "  ProtonsCut_Pz: " << ProtonsCut_Pz*weight << "  channelCut: " << channelCut*weight << "  phtonSizeCut: " << photonSizeCut*weight << " leptonSizeCut: " << leptonSizeCut*weight  << " protonSizeCut: " << protonSizeCut*weight << " Mzwindow: " << Mzwindow*weight << "  cms_xiCut: " << cms_xiCut*weight << " xiCondition: " << xicondition*weight << "  ZVertexCut: " << ZVertexCut*weight << "  timingCut: " << timingCut*weight << "  XiResulutionCut: " << XiResulutionCut*weight << "  RapidityCut: " << RapidityCut*weight << endl;
 
     //open file for writing
     ofstream fw(path +  ssig + "_" + sxi + "_" + spu + "_" + timepc + "_" + "ee" + ".txt", std::ofstream::out);
