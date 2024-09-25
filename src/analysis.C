@@ -290,7 +290,7 @@ cout << ">>>> !!!!!!!!!!!! " << endl;
     //TString ssig = signame; //"madgraph" ;// "signal2"; // "zzbkg3";
     //TString path = "/afs/cern.ch/user/s/sibashir/zzbkg/plots/";
     //TString path = "/home/bashiri/Dropbox/task/taskCode/plots/";
-    TString path = "/eos/cms/store/group/phys_top/bashiri/plots/";
+    TString path = "./";
            
     //std::vector<TString> regions{"ZPt", "ny", "Mzwindow", "PPSXi", "nProton", "XiResolutionCut", "ZVertexCut", "timingCut"};
     std::vector<TString> regions{"ZPt", "ny", "Mzwindow", "nProton", "XiResolutionCut", "ZVertexCut", "timingCut"};

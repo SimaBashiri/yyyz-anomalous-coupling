@@ -26,9 +26,9 @@
 #include "lepton_candidate.h"
 #include "photon_candidate.h"
 #include "proton_candidate.h"
-#include "lepton_candidate.cc"
-#include "photon_candidate.cc"
-#include "proton_candidate.cc"
+// #include "lepton_candidate.cc"
+// #include "photon_candidate.cc"
+// #include "proton_candidate.cc"
 
 class analysis {
 public :

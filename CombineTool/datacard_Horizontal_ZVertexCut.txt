@@ -2,7 +2,7 @@ imax 1 number of categories
 jmax * number of background
 kmax * number of nuisance parameters
 ------------
-shapes * bin  ../in/Horizontal_ZVertexCut.root  $PROCESS $PROCESS_$SYSTEMATIC
+shapes * bin  Horizontal_ZVertexCut.root  $PROCESS $PROCESS_$SYSTEMATIC
 ------------
 bin                                               bin
 observation                                      -1
