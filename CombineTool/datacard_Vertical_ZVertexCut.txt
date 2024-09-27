@@ -4,8 +4,8 @@ kmax * number of nuisance parameters
 ------------
 shapes * bin  Vertical_ZVertexCut.root  $PROCESS $PROCESS_$SYSTEMATIC
 ------------
-bin                                               bin
-observation                                      -1
+#bin                                               bin
+#observation                                      -1
 ------------
 bin              bin                      bin                           
 process           0                       1            	  

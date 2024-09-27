@@ -2,3 +2,7 @@ combine -M FitDiagnostics datacard_Horizontal_ZVertexCut.txt -t -1 --expectSigna
 combine -M FitDiagnostics datacard_Vertical_ZVertexCut.txt -t -1 --expectSignal 1 --rMin -1 --rMax 2 --forceRecreateNLL
 combine -M AsymptoticLimits datacard_Horizontal_ZVertexCut.txt --run blind -t -1
 combine -M AsymptoticLimits datacard_Vertical_ZVertexCut.txt --run blind -t -1
+
+### newly proposed 
+text2workspace.py -P HiggsAnalysis.CombinedLimit.yyyz:yyyz datacard_Vertical_ZVertexCut.txt -o o/yyyz.root 
+combine -M MultiDimFit o/yyyz.root  -n .singles --algo singles  -t -1  --setParameters zta=1e-1,zta~=1e-2,r=1
