@@ -1,7 +1,3 @@
-# Fitting Instructions
-
-This guide provides instructions on how to perform fits using the Combine tool with the `MultiDimFit` method. You will perform fits at the expected level using the Asimov dataset and fit using an observed smeared toy dataset.
-
 ## Steps to Run the Fit
 
 ### 1. Move the `Mymodel.py` file
