@@ -4,5 +4,5 @@ combine -M AsymptoticLimits datacard_Horizontal_ZVertexCut.txt --run blind -t -1
 combine -M AsymptoticLimits datacard_Vertical_ZVertexCut.txt --run blind -t -1
 
 ### newly proposed 
-text2workspace.py -P HiggsAnalysis.CombinedLimit.yyyz:yyyz datacard_Vertical_ZVertexCut.txt -o o/yyyz.root 
+text2workspace.py -P HiggsAnalysis.CombinedLimit.MyModel:yyyz datacard_Vertical_ZVertexCut.txt -o o/yyyz.root 
 combine -M MultiDimFit o/yyyz.root  -n .singles --algo singles  -t -1  --setParameters zta=1e-1,zta~=1e-2,r=1
