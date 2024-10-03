@@ -8,30 +8,21 @@ int main() {
     TChain* ch = new TChain("Delphes");
     analysis t(ch);
 
-    // zz1
+    // zy1
     ch->Add(path + "ZToMuMu_M-120to200_TuneCP5_14TeV-powheg-pythia8/*");
     t.Loop(18.72e-12, "all", "V", "ztomumu1", tp);
-
-    ch->SetEntries(0);  
-    ch->Add(path + "ZToMuMu_M-120to200_TuneCP5_14TeV-powheg-pythia8/*");
     t.Loop(18.72e-12, "all", "H", "ztomumu1", tp);
 
-    // zz2
+    // zy2
     ch->SetEntries(0);
     ch->Add(path + "ZToMuMu_M-200to400_TuneCP5_14TeV-powheg-pythia8/*");
     t.Loop(2.682e-12, "all", "V", "ztomumu2", tp);
-
-    ch->SetEntries(0);
-    ch->Add(path + "ZToMuMu_M-200to400_TuneCP5_14TeV-powheg-pythia8/*");
     t.Loop(2.682e-12, "all", "H", "ztomumu2", tp);
 
-    // zz3
+    // zy3
     ch->SetEntries(0);
     ch->Add(path + "ZToMuMu_M-400to800_TuneCP5_14TeV-powheg-pythia8/*");
     t.Loop(0.2396e-12, "all", "V", "ztomumu3", tp);
-
-    ch->SetEntries(0);
-    ch->Add(path + "ZToMuMu_M-400to800_TuneCP5_14TeV-powheg-pythia8/*");
     t.Loop(0.2396e-12, "all", "H", "ztomumu3", tp);
 
     // // mad
@@ -43,14 +34,11 @@ int main() {
     // ch->Add(path + "MadGraph5_14TeV_pptoZA-noHadr-1.314E2pm7.0E-1_Zmumu_Delphes_PU200_v2.root");
     // t.Loop(1.314e-10, "all", "V", "mad", tp);
 
-    // zy
+    // zy SM
     ch->SetEntries(0);
-    ch->Add(path + "Zgamma_inc_SM_Madgraph5_Delphes_PU200.root");
-    t.Loop(1, "all", "H", "zy", tp);
-
-    ch->SetEntries(0);
-    ch->Add(path + "Zgamma_inc_SM_Madgraph5_Delphes_PU200.root");
-    t.Loop(1, "all", "V", "zy", tp);
+    ch->Add(path + "/Zgamma_inc_SM_Madgraph5_PhotonPT200GeV_Delphes_PU200/*.root");
+    t.Loop(0.152e-12, "all", "H", "zy", tp);
+    t.Loop(0.152e-12, "all", "V", "zy", tp);
 
     // signal1
     ch->SetEntries(0);
