@@ -13,7 +13,7 @@ using namespace std;
 class proton_candidate {
   
 public:
-  proton_candidate(float, float, float, float, int, int, float );
+  proton_candidate(float, float, float, float, int, int, float, float );
   ~proton_candidate();
   float pt_;
   float eta_;
@@ -23,6 +23,7 @@ public:
   int indice_;
   TLorentzVector p4_;
   float xi_;
+  float smearfac_;
 
 
 private:

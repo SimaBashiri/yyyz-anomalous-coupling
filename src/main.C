@@ -8,22 +8,22 @@ int main() {
     TChain* ch = new TChain("Delphes");
     analysis t(ch);
 
-    // zy1
-    ch->Add(path + "ZToMuMu_M-120to200_TuneCP5_14TeV-powheg-pythia8/*");
-    t.Loop(18.72e-12, "all", "V", "ztomumu1", tp);
-    t.Loop(18.72e-12, "all", "H", "ztomumu1", tp);
+    // // zy1
+    // ch->Add(path + "ZToMuMu_M-120to200_TuneCP5_14TeV-powheg-pythia8/*");
+    // t.Loop(18.72e-12, "all", "V", "ztomumu1", tp);
+    // t.Loop(18.72e-12, "all", "H", "ztomumu1", tp);
 
-    // zy2
-    ch->SetEntries(0);
-    ch->Add(path + "ZToMuMu_M-200to400_TuneCP5_14TeV-powheg-pythia8/*");
-    t.Loop(2.682e-12, "all", "V", "ztomumu2", tp);
-    t.Loop(2.682e-12, "all", "H", "ztomumu2", tp);
+    // // zy2
+    // ch->SetEntries(0);
+    // ch->Add(path + "ZToMuMu_M-200to400_TuneCP5_14TeV-powheg-pythia8/*");
+    // t.Loop(2.682e-12, "all", "V", "ztomumu2", tp);
+    // t.Loop(2.682e-12, "all", "H", "ztomumu2", tp);
 
-    // zy3
-    ch->SetEntries(0);
-    ch->Add(path + "ZToMuMu_M-400to800_TuneCP5_14TeV-powheg-pythia8/*");
-    t.Loop(0.2396e-12, "all", "V", "ztomumu3", tp);
-    t.Loop(0.2396e-12, "all", "H", "ztomumu3", tp);
+    // // zy3
+    // ch->SetEntries(0);
+    // ch->Add(path + "ZToMuMu_M-400to800_TuneCP5_14TeV-powheg-pythia8/*");
+    // t.Loop(0.2396e-12, "all", "V", "ztomumu3", tp);
+    // t.Loop(0.2396e-12, "all", "H", "ztomumu3", tp);
 
     // // mad
     // ch->SetEntries(0);
@@ -42,11 +42,11 @@ int main() {
 
     // signal1
     ch->SetEntries(0);
-    ch->Add(path + "/FPMC_bSM_14tev_AAAZeft_A1A_0E0_A2A_1E-13_pt50_horXing-noHADR_2.4390029090069734E-003_Zmumu_Delphes_PU200.root");
+    ch->Add(path + "../horXing_PU200/FPMC_bSM_14tev_AAAZeft_A1A_0E0_A2A_1E-13_pt50_horXing-noHADR_2.4390029090069734E-003_Zmumu_Delphes_PU200.root");
     t.Loop(2.439E-15, "all", "H", "signal1", tp);
 
     ch->SetEntries(0);
-    ch->Add(path + "/FPMC_bSM_14tev_AAAZeft_A1A_0E0_A2A_1E-13_pt50_horXing-noHADR_2.4390029090069734E-003_Zmumu_Delphes_PU200.root");
+    ch->Add(path + "../horXing_PU200/FPMC_bSM_14tev_AAAZeft_A1A_0E0_A2A_1E-13_pt50_horXing-noHADR_2.4390029090069734E-003_Zmumu_Delphes_PU200.root");
     t.Loop(2.439E-15, "nopu", "H", "signal1", tp);
 
     ch->SetEntries(0);

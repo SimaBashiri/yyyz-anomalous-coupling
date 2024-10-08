@@ -41,8 +41,6 @@ public :
       std::vector<lepton_candidate*> *selectedLeptons;
       std::vector<photon_candidate*> *selectedPhotons;
       std::vector<proton_candidate*> *selectedProtons;
-      std::vector<proton_candidate*> *selectedProtonsPlus;
-      std::vector<proton_candidate*> *selectedProtonsMinus;
       
 // Fixed size dimensions of array or collections stored in the TTree if any.
    static constexpr Int_t kMaxEvent = 1;
