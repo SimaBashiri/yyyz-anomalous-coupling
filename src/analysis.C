@@ -132,20 +132,83 @@ void histogram(TH1F *Hists[2][8][32+2+2], TH2F *Hists2[2][8][7], int ch, int cn,
     float z_Vertex;
     float diff1;
     float diff2;
+    float cos;
+    float sin2;
+    TLorentzVector cental;
+    float fraction;
+    float beta;
+    float s_;
+    float E_ ;
+    float var1_;
+    float var2_;
+    float MZ_;
+    float MyZ_;
+    float crossx;
+    float diffcross;
+    float newXsection;
+    float Z_CM_mag;
+    float Z_mag;
 
     if((*selectedPhotons).size() > 0 && (selectedLeptons->size() > 1)){
 
-      xi_cms1 = ( ((*selectedLeptons)[0]->p4_).E() + ((*selectedLeptons)[1]->p4_).E() + ((*selectedPhotons)[0]->p4_).E() + ((*selectedLeptons)[0]->p4_).Pz() + ((*selectedLeptons)[1]->p4_).Pz() + ((*selectedPhotons)[0]->p4_).Pz() )/14000;
-      xi_cms2 = ( ((*selectedLeptons)[0]->p4_).E() + ((*selectedLeptons)[1]->p4_).E() + ((*selectedPhotons)[0]->p4_).E() - (((*selectedLeptons)[0]->p4_).Pz() + ((*selectedLeptons)[1]->p4_).Pz() + ((*selectedPhotons)[0]->p4_).Pz()) )/14000;
-   
+      TLorentzVector Z_boson = (*selectedLeptons)[0]->p4_ + (*selectedLeptons)[1]->p4_;
+      Z_mag = Z_boson.Vect().Mag();
+      MZ_ = Z_boson.M();
+      cental = (*selectedLeptons)[0]->p4_ + (*selectedLeptons)[1]->p4_ + (*selectedPhotons)[0]->p4_ ;
+      MyZ_ = cental.M();
+      TVector3 boostVector = cental.BoostVector();
+    
+      Z_boson.Boost(-boostVector);
+      Z_CM_mag = Z_boson.Vect().Mag();
+
+
+      // TLorentzVector photon = (*selectedPhotons)[0]->p4_;
+      // photon.Boost(-boostVector);
+
+      TLorentzVector init_photon;
+      init_photon.SetPxPyPzE(0, 0, cental.M()/2, cental.M()/2);
+      TVector3 init_photon_V3 = init_photon.Vect();
+      // cos = init_photon_V3.Dot(Z_boson.Vect())/ (init_photon_V3.Mag() * Z_boson.Vect().Mag());
+      // cout << cos << endl;
+      // sin2 = (1. - cos*cos) ;
+
+      double theta = init_photon_V3.Angle(Z_boson.Vect());
+      sin2 = TMath::Power(std::sin(theta), 2);
+      // cout << sin2 << endl;
+        double xi = 1e-12;
+        double xibar = 1e-13;
+        var1_ = 3*xi*xi + 3*xibar*xibar - 2*xi*xibar;
+        var2_ = (xi*xi + xibar*xibar - xi*xibar) * (xi*xi + xibar*xibar - xi*xibar);
+        E_ = MyZ_/2;
+        s_ = 4*E_*E_;
+        beta = 1 - TMath::Power(MZ_, 2) / s_;
+
+      fraction =  beta * TMath::Power(E_, 6) * sin2 / (TMath::Pi() * TMath::Pi() * s_);
+       crossx =  (fraction *(2*TMath::Pi() * (7/4)*TMath::Pi()) * 16 * TMath::Power(E_,2)) * (var1_) * sin2 - 4*fraction * (2*TMath::Pi() * (1/2)*TMath::Pi()) * 1*TMath::Power(MZ_, 2) * TMath::Power(var2_, 2);
+
+    // newXsection = 192. * beta * TMath::Power(E_, 8) * var1_/(5*TMath::Pi()*s_);
+    newXsection = 192. * beta * TMath::Power(E_, 8) * 1/(5*TMath::Pi()*s_);
+
+    // weight = weight * newXsection;
+    // weight = weight * Z_mag/Z_CM_mag;
+    // weight = weight * var1_;
+    }
+    
+    if((*selectedPhotons).size() > 0 && (selectedLeptons->size() > 1)){
+
+      xi_cms1 = ( ((*selectedLeptons)[0]->p4_).E() + ((*selectedLeptons)[1]->p4_).E() + ((*selectedPhotons)[0]->p4_).E() + abs(((*selectedLeptons)[0]->p4_).Pz() + ((*selectedLeptons)[1]->p4_).Pz() + ((*selectedPhotons)[0]->p4_).Pz()) )/14000;
+      xi_cms2 = ( ((*selectedLeptons)[0]->p4_).E() + ((*selectedLeptons)[1]->p4_).E() + ((*selectedPhotons)[0]->p4_).E() - abs(((*selectedLeptons)[0]->p4_).Pz() + ((*selectedLeptons)[1]->p4_).Pz() + ((*selectedPhotons)[0]->p4_).Pz()) )/14000;
+      xi_cms1 = xi_cms1*(1+(*selectedProtons)[0]->smearfac_);
+      xi_cms2 = xi_cms2*(1+(*selectedProtons)[1]->smearfac_);
+
       MX = 14000 * TMath::Sqrt(xi_cms1 * xi_cms2);
       YX = 0.5 * TMath::Log(xi_cms1 / xi_cms2);
       YZ_Rapidity = Rapidity( ((*selectedLeptons)[0]->p4_ + (*selectedLeptons)[1]->p4_ + (*selectedPhotons)[0]->p4_).E(),  ((*selectedLeptons)[0]->p4_ + (*selectedLeptons)[1]->p4_ + (*selectedPhotons)[0]->p4_).Pz() );
-      sum_p = TMath::Sqrt( ((*selectedLeptons)[0]->p4_).Px()*((*selectedLeptons)[0]->p4_).Px() + ((*selectedLeptons)[0]->p4_).Py()*((*selectedLeptons)[0]->p4_).Py() +
-      ((*selectedLeptons)[0]->p4_).Pz()*((*selectedLeptons)[0]->p4_).Pz() ) + TMath::Sqrt( ((*selectedLeptons)[1]->p4_).Px()*((*selectedLeptons)[1]->p4_).Px() + ((*selectedLeptons)[1]->p4_).Py()*((*selectedLeptons)[1]->p4_).Py() +
-      ((*selectedLeptons)[1]->p4_).Pz()*((*selectedLeptons)[1]->p4_).Pz() ) + TMath::Sqrt( ((*selectedPhotons)[0]->p4_).Px()*((*selectedPhotons)[0]->p4_).Px() + ((*selectedPhotons)[0]->p4_).Py()*((*selectedPhotons)[0]->p4_).Py() +
-      ((*selectedPhotons)[0]->p4_).Pz()*((*selectedPhotons)[0]->p4_).Pz() );
-
+      // sum_p = TMath::Sqrt( ((*selectedLeptons)[0]->p4_).Px()*((*selectedLeptons)[0]->p4_).Px() + ((*selectedLeptons)[0]->p4_).Py()*((*selectedLeptons)[0]->p4_).Py() +
+      // ((*selectedLeptons)[0]->p4_).Pz()*((*selectedLeptons)[0]->p4_).Pz() ) + TMath::Sqrt( ((*selectedLeptons)[1]->p4_).Px()*((*selectedLeptons)[1]->p4_).Px() + ((*selectedLeptons)[1]->p4_).Py()*((*selectedLeptons)[1]->p4_).Py() +
+      // ((*selectedLeptons)[1]->p4_).Pz()*((*selectedLeptons)[1]->p4_).Pz() ) + TMath::Sqrt( ((*selectedPhotons)[0]->p4_).Px()*((*selectedPhotons)[0]->p4_).Px() + ((*selectedPhotons)[0]->p4_).Py()*((*selectedPhotons)[0]->p4_).Py() +
+      // ((*selectedPhotons)[0]->p4_).Pz()*((*selectedPhotons)[0]->p4_).Pz() );
+      sum_p = ((*selectedLeptons)[0]->p4_).E() + ((*selectedLeptons)[1]->p4_).E() + ((*selectedPhotons)[0]->p4_).E();
       sum_pz = ((*selectedLeptons)[0]->p4_).Pz() + ((*selectedLeptons)[1]->p4_).Pz() + ((*selectedPhotons)[0]->p4_).Pz();
    }
 
@@ -180,6 +243,9 @@ void histogram(TH1F *Hists[2][8][32+2+2], TH2F *Hists2[2][8][7], int ch, int cn,
       z_Vertex = zt_Vertex_(selectedProtons, GenProton_T, GenProton_Z, selp, selm).first;
       t_Vertex = zt_Vertex_(selectedProtons, GenProton_T, GenProton_Z, selp, selm).second;
       // cout << "zv1: " << z_Vertex << "  " << "zv2: " << Vertex_Z[0]*0.1  << "   minzV: " << (Vertex_Z[0]*0.1) - z_Vertex << endl;
+
+
+
 //         float pp_eta = ((*selectedProtons)[0]->p4_ + (*selectedProtons)[1]->p4_).Eta();
       Hists[ch][cn][13]->Fill((*selectedProtons)[0]->pt_,weight);
       Hists[ch][cn][14]->Fill(GenProton_Rapidity[(*selectedProtons)[0]->indice_],weight);
@@ -188,9 +254,8 @@ void histogram(TH1F *Hists[2][8][32+2+2], TH2F *Hists2[2][8][7], int ch, int cn,
       Hists[ch][cn][17]->Fill(GenProton_Rapidity[(*selectedProtons)[1]->indice_],weight);
       Hists[ch][cn][18]->Fill((*selectedProtons)[1]->phi_,weight);
     }
-    if((*selectedProtons).size() > 0)   diff1 = (*selectedProtons)[0]->xi_-((sum_p + sum_pz)/14000);
-    if((*selectedProtons).size() > 1)   diff2 = (*selectedProtons)[1]->xi_-((sum_p - sum_pz)/14000);
-          
+    if((*selectedProtons).size() > 0)   diff1 = ((*selectedProtons)[0]->xi_- ((sum_p + abs(sum_pz))/14000))*(1+(*selectedProtons)[0]->smearfac_);;
+    if((*selectedProtons).size() > 1)   diff2 = ((*selectedProtons)[1]->xi_- ((sum_p - abs(sum_pz))/14000))*(1+(*selectedProtons)[1]->smearfac_);;
       
     if(selectedPhotons->size() > 0 && selectedLeptons->size() > 1){
       Hists[ch][cn][19]->Fill(((*selectedLeptons)[0]->p4_ + (*selectedLeptons)[1]->p4_ + (*selectedPhotons)[0]->p4_).M(),weight);
@@ -222,8 +287,6 @@ void histogram(TH1F *Hists[2][8][32+2+2], TH2F *Hists2[2][8][7], int ch, int cn,
         Hists[ch][cn][31]->Fill(ZY_dPhi , weight);
 
     }
-
-
 }
 
 
@@ -328,51 +391,13 @@ void analysis::Loop(double cross_section, TString puflag, TString xiflag, TStrin
     TString path = "./";
     std::vector<TString> regions{"ZPt", "ny", "Mzwindow", "zyDeltaPhi", "nProton", "XiResolutionCut", "ZVertexCut", "timingCut"};
     std::vector<TString> channels{"ee", "mumu"};
-    std::vector<TString> vars   {"lep1Pt","lep1Eta","lep1Phi","lep2Pt","lep2Eta","lep2Phi","photonPt","photonEta","photonPhi","Mz","Ptz","Drz","Dphiz","proton1Pt","proton1Rapidity","proton1Phi","proton2Pt","proton2Rapidity","proton2Phi", "zgammaM", "zgammaPt", "zgammaRapidity", "YXyzgamma", "YX", "xi_Resolution(p1&p2)", "diff1", "diff2", "time_Resolution", "ZVertex_resolution",  "isPU1", "isPU2", "ZYdPhi"}; //, "Tmp1", "Tmp2", "sin2", "total"};
-    std::vector<TString> HTitles{
-        "p_{T}(\\text{leading lepton}) \\ [\\text{GeV}]",
-        "\\eta(\\text{leading lepton})",
-        "\\Phi(\\text{leading lepton}) \\ [\\text{Rad}]",
-        "p_{T}(\\text{sub-leading lepton}) \\ [\\text{GeV}]",
-        "\\eta(\\text{sub-leading lepton})",
-        "\\Phi(\\text{sub-leading lepton}) \\ [\\text{Rad}]",
-        "p_{T}(\\gamma) \\ [\\text{GeV}]",
-        "\\eta(\\gamma)",
-        "\\Phi(\\gamma) \\ [\\text{Rad}]",
-        "M_{\mu\mu} \ [\text{GeV}]",
-        "p_{T}(\mu\mu) \\ [\\text{GeV}]",
-        "\\Delta R(\mu\mu) \\ [\\text{Rad}]",
-        "\\Delta \\Phi(\mu\mu) \\ [\\text{Rad}]",
-        "p_{T}(\\text{proton1}) \\ [\\text{GeV}]",
-        "\\text{rapidity}(\\text{proton1})",
-        "\\Phi(\\text{proton1}) \\ [\\text{Rad}]",
-        "p_{T}(\\text{proton2}) \\ [\\text{GeV}]",
-        "\\text{rapidity}(\\text{proton2})",
-        "\\Phi(\\text{proton2}) \\ [\\text{Rad}]",
-        "M_{\\gamma z} \\ [\\text{GeV}]",
-        "p_{T}(\\gamma z) \\ [\\text{GeV}]",
-        "\\text{rapidity}(\\gamma z)",
-        "Y_{X} - Y_{\\gamma z}",
-        "Y_{X}",
-        "\\text{Resolution}_{\\xi}",
-        "|\\xi_{\\text{pps1}} - \\xi_{\\text{cms1}}|",
-        "|\\xi_{\\text{pps2}} - \\xi_{\\text{cms2}}|",
-        "|Vertex.T_{\\text{pps}} - Vertex.T_{\\text{cms}}| \\ [\\text{ns}]",
-        "|Vertex.Z_{\\text{pps}} - Vertex.Z_{\\text{cms}}| \\ [\\text{cm}]",
-
-        "\\text{isPU1}",
-        "\\text{isPU2}",
-        "\\Delta \\Phi(Z\\gamma)",
-        "\\text{Tmp1}",
-        "\\text{Tmp2}",
-        "\\sin(2)",
-        "\\text{total}"
-    };
+    std::vector<TString> vars   {"lep1Pt","lep1Eta","lep1Phi","lep2Pt","lep2Eta","lep2Phi","photonPt","photonEta","photonPhi","Mz","Ptz","Drz","Dphiz","proton1Pt","proton1Rapidity","proton1Phi","proton2Pt","proton2Rapidity","proton2Phi", "zgammaM", "zgammaPt", "zgammaRapidity", "YXyzgamma", "YX", "xi_Resolution(p1&p2)", "diff1", "diff2", "time_Resolution", "ZVertex_resolution",  "isPU1", "isPU2", "ZYdPhi"};
+    std::vector<TString> HTitles{"p_{T}(leading lepton) [GeV]","#eta(leading lepton)","#Phi(leading lepton) [Rad]","p_{T}(sub-leading lepton) [GeV]","#eta(sub-leading lepton)","#Phi(sub-leading lepton) [Rad]","p_{T}(#gamma) [GeV]","#eta(#gamma)","#Phi(#gamma) [Rad]","M_{ll} [GeV]","p_{T}(ll) [GeV]","#Delta R(ll) [Rad]","#Delta #Phi(ll) [Rad]","p_{T}(proton1) [GeV]","rapidity(proton1)","#Phi(proton1) [Rad]","p_{T}(proton2) [GeV]","rapidity(proton2)","#Phi(proton2) [Rad]", "M_{#gammaz} [GeV]", "p_{T}(#gammaz) [GeV]", "rapidity(#gammaz)", "Y_{X}-Y_{#gammaz}", "Y_{X}", "Resolution_{#xi}", "|#xi_pps1-#xi_cms1|", "|#xi_pps2-#xi_cms2|", "|t_p - t_Vertex| [ns]", "|Z_p - Z_Vertex| [cm]", "isPU1", "isPU2", "#Delta#Phi(Z#gamma)"};
 
     std::vector<int>    nbins   {30      ,20       ,25       ,20      ,20       ,25       ,30      ,20       ,25       ,30   ,35    ,25    ,15    ,30      ,20       ,25       ,30      ,20       ,25       ,30    ,30   ,20,  40,  40 ,   80,   50,   50,   100,  200, 10, 10, 20, 10, 10, 10, 100};
-    std::vector<float> lowEdge  {0       ,-3       ,-4       ,0       ,-3       ,-4       ,0       ,-3       ,-4       ,0    ,0     ,0     ,0       ,0       ,-15       ,-3.2       ,0       ,-15       ,-3.2       ,0       ,0     ,-4      ,  -2e-7,  -2,   -2.,   -0.015*3,   -0.015*3,  -1/*-1.3*/,   -7/*-5e-3*/, -5, -5, -6 , 0, 0, 0, 0};
-    std::vector<float> highEdge {2000     ,3        ,4        ,500     ,3        ,4        ,2000     ,3        ,4        ,150   ,3500   ,7     ,4     ,6.5     ,15        ,3.2        ,6.5     ,15        ,3.2       ,8000    ,100    ,4     ,2e-7,   2,  2. ,   0.015*6,    0.015*6,   1/*1.3*/,   7/*5e-3*/, 5, 5,  6, 360000000, 360000000, 1, 1};
-
+    std::vector<float> lowEdge  {0       ,-3       ,-4       ,0       ,-3       ,-4       ,0       ,-3       ,-4       ,0    ,0     ,0     ,0       ,0       ,-15       ,-3.2       ,0       ,-15       ,-3.2       ,0       ,0     ,-4      ,  -2e-7,  -2,   -2.,   -0.015*6,   -0.015*6,  -0.5/*-1.3*/,   -4/*-5e-3*/, -5, -5, -6};
+    std::vector<float> highEdge {2000     ,3        ,4        ,500     ,3        ,4        ,2000     ,3        ,4        ,150   ,3500   ,7     ,4     ,6.5     ,15        ,3.2        ,6.5     ,15        ,3.2       ,8000    ,100    ,4     ,2e-7,   2,  2. ,   0.015*6,    0.015*6,   0.5/*1.3*/,   4/*5e-3*/, 5, 5,  6};
+    
     TH1F *Hists[2][8][32+2+2] ;
     std::stringstream name;
     TH1F *h_test;
@@ -689,13 +714,14 @@ void analysis::Loop(double cross_section, TString puflag, TString xiflag, TStrin
       // if(ch==0)   ele_xicondition++;
       // if(ch==1)   mu_xicondition++;
 
-      xi_cms1 = ( ((*selectedLeptons)[0]->p4_).E() + ((*selectedLeptons)[1]->p4_).E() + ((*selectedPhotons)[0]->p4_).E() + ((*selectedLeptons)[0]->p4_).Pz() + ((*selectedLeptons)[1]->p4_).Pz() + ((*selectedPhotons)[0]->p4_).Pz() )/14000;
-      xi_cms2 = ( ((*selectedLeptons)[0]->p4_).E() + ((*selectedLeptons)[1]->p4_).E() + ((*selectedPhotons)[0]->p4_).E() - (((*selectedLeptons)[0]->p4_).Pz() + ((*selectedLeptons)[1]->p4_).Pz() + ((*selectedPhotons)[0]->p4_).Pz()) )/14000;
-      xi_cms1 = xi_cms1*(1+smear);
-      xi_cms2 = xi_cms2*(1+smear);
+
+      xi_cms1 = ( ((*selectedLeptons)[0]->p4_).E() + ((*selectedLeptons)[1]->p4_).E() + ((*selectedPhotons)[0]->p4_).E() + abs(((*selectedLeptons)[0]->p4_).Pz() + ((*selectedLeptons)[1]->p4_).Pz() + ((*selectedPhotons)[0]->p4_).Pz()) )/14000;
+      xi_cms2 = ( ((*selectedLeptons)[0]->p4_).E() + ((*selectedLeptons)[1]->p4_).E() + ((*selectedPhotons)[0]->p4_).E() - abs((((*selectedLeptons)[0]->p4_).Pz() + ((*selectedLeptons)[1]->p4_).Pz() + ((*selectedPhotons)[0]->p4_).Pz())) )/14000;
+      xi_cms1 = xi_cms1*(1+(*selectedProtons)[0]->smearfac_);
+      xi_cms2 = xi_cms2*(1+(*selectedProtons)[1]->smearfac_);
 
       // |xi_pps - xi_cms| cut
-      if(abs((*selectedProtons)[0]->xi_ - xi_cms1) > 0.2 && abs((*selectedProtons)[0]->xi_ - xi_cms2) > 0.2 )   {
+      if(abs((*selectedProtons)[0]->xi_ - xi_cms1) > 0.02*2 )   {
         cleanupVectors(selectedLeptons, selectedPhotons, selectedProtons);
         continue;
       }
@@ -703,7 +729,7 @@ void analysis::Loop(double cross_section, TString puflag, TString xiflag, TStrin
       if(ch==1)   mu_r1XiResulutionCut++;
 
       // |xi_pps - xi_cms| cut
-      if(abs((*selectedProtons)[1]->xi_ - xi_cms2) > 0.2 && abs((*selectedProtons)[1]->xi_ - xi_cms1) > 0.2 )   {
+      if(abs((*selectedProtons)[1]->xi_ - xi_cms2) > 0.02*2 )   {
         cleanupVectors(selectedLeptons, selectedPhotons, selectedProtons);
         continue;
       }
