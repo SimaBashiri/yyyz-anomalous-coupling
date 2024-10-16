@@ -40,7 +40,7 @@ def stackPlots(hists, Fnames, ch="channel", reg="region", var="sample", varname=
     CMS_lumi.lumiTextSize = 0.4
     CMS_lumi.lumi_sqrtS = f"#bf{{{cr.capitalize()} crossing}} Delphes  |  #sigma_t = {timepr} ps  |  3000 fb^{{-1}} (14 TeV)"
     
-    W_ref, H_ref = (640, 600) if cr == "Vertical" else (660, 600)
+    W_ref, H_ref = (660, 600)
     canvas = rt.TCanvas("canvas", "canvas", 50, 50, W_ref, H_ref)
     canvas.SetFillColor(0)
     canvas.SetBorderMode(0)
